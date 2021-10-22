@@ -7,26 +7,24 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MainWithLock {
 
-    private static int num1 = 0;
 
     public static void main(String[] args) {
 
-        Lock lock1 = new ReentrantLock();
-        lock1.lock();
+        Counter counter = new Counter();
         try {
-            num1++;
-            System.out.println(num1);
+            counter.increment();
+            System.out.println(counter.getCount());
         } finally {
-            lock1.unlock();
+            System.out.println("___");
         }
 
         Lock lock2 = new ReentrantLock();
         lock2.lock();
         try {
-            num1++;
-            System.out.println(num1);
+            counter.increment();
+            System.out.println(counter.getCount());
         } finally {
-            lock2.unlock();
+            System.out.println("___");
         }
 
     }
