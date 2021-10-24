@@ -1,0 +1,10 @@
+SELECT name, time_start, length
+FROM cinema.films JOIN cinema.seans ON films.id = seans.film_id JOIN cinema.price ON seans.price_id = price.id;
+
+SELECT name, COUNT(*) AS audience, SUM(price) AS money
+FROM cinema.films JOIN cinema.seans ON films.id = seans.film_id JOIN cinema.tickets ON seans.id = tickets.seans_id
+JOIN cinema.price ON seans.price_id = price.id GROUP BY films.name ORDER BY SUM(price) DESC;
+
+SELECT COUNT(*) AS audience, SUM(price) AS money
+FROM cinema.films JOIN cinema.seans ON films.id = seans.film_id JOIN cinema.tickets ON seans.id = tickets.seans_id
+JOIN cinema.price ON seans.price_id = price.id GROUP BY price.time_stat ORDER BY SUM(price) DESC;
