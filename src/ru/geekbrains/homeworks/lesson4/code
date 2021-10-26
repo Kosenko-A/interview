@@ -1,3 +1,95 @@
+СОЗДАЕМ БД
+
+CREATE SCHEMA `cinema` ;
+
+СОЗДАЕМ ТАБЛИЦЫ
+
+CREATE TABLE `cinema`.`films` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `length` INT NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `cinema`.`price` (
+  `id` INT NOT NULL,
+  `price` VARCHAR(45) NOT NULL,
+  `time_start` TIME() NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `cinema`.`seans` (
+  `id` INT NOT NULL,
+  `film_id` INT NOT NULL,
+  `price_id` INT NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `cinema`.`tickets` (
+  `id` INT NOT NULL,
+  `seans_id` INT NOT NULL,
+  PRIMARY KEY (`id`));
+
+ПРИСВАИВАЕМ ВЕШНИЕ КЛЮЧИ
+
+ALTER TABLE `cinema`.`tickets`
+ADD INDEX `fk_tickets_seans_id` (`seans_id` ASC) VISIBLE;
+;
+ALTER TABLE `cinema`.`tickets`
+ADD CONSTRAINT `fk_tickets_seans`
+  FOREIGN KEY (`seans_id`)
+  REFERENCES `cinema`.`seans` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `cinema`.`seans`
+ADD INDEX `fk_seans_film_idx` (`film_id` ASC) VISIBLE,
+ADD INDEX `fk_seans_price_idx` (`price_id` ASC) VISIBLE;
+;
+ALTER TABLE `cinema`.`seans`
+ADD CONSTRAINT `fk_seans_film`
+  FOREIGN KEY (`film_id`)
+  REFERENCES `cinema`.`films` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_seans_price`
+  FOREIGN KEY (`price_id`)
+  REFERENCES `cinema`.`price` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ЗАПОЛНЯЕМ ТАБЛИЦЫ
+
+INSERT INTO `cinema`.`films` (`id`, `name`, `length`) VALUES ('1', 'Небо', '60');
+INSERT INTO `cinema`.`films` (`id`, `name`, `length`) VALUES ('2', 'Гонка', '90');
+INSERT INTO `cinema`.`films` (`id`, `name`, `length`) VALUES ('3', 'Агент 007', '120');
+INSERT INTO `cinema`.`films` (`id`, `name`, `length`) VALUES ('4', 'Гарри Поттер', '60');
+INSERT INTO `cinema`.`films` (`id`, `name`, `length`) VALUES ('5', 'Судья', '90');
+
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('1', '100', '9:00');
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('2', '150', '12:00');
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('3', '200', '15:00');
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('4', '350', '18:00');
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('5', '200', '21:00');
+INSERT INTO `cinema`.`price` (`id`, `price`, `time_start`) VALUES ('6', '100', '00:00');
+
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('1', '1', '1');
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('2', '2', '2');
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('3', '4', '3');
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('4', '5', '4');
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('5', '3', '5');
+INSERT INTO `cinema`.`seans` (`id`, `film_id`, `price_id`) VALUES ('6', '2', '6');
+
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('1', '2');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('2', '3');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('3', '3');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('4', '4');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('5', '5');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('6', '6');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('7', '1');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('8', '2');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('9', '2');
+INSERT INTO `cinema`.`tickets` (`id`, `seans_id`) VALUES ('10', '4');
+
+ЗАПРОСЫ
+
 SELECT name, time_start, length
 FROM cinema.films JOIN cinema.seans ON films.id = seans.film_id JOIN cinema.price ON seans.price_id = price.id;
 
